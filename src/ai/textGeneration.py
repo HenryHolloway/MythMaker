@@ -1,0 +1,1 @@
+# handles prompting ollama api, various models or however we decide to handle this
