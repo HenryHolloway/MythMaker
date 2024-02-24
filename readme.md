@@ -1,4 +1,4 @@
-![The Myth Maker](https://github.com/HenryHolloway/MythMaker/blob/main/assets/TheMythMaker.png)
+<img alt="The Myth Maker" src="https://github.com/HenryHolloway/MythMaker/blob/main/assets/TheMythMaker.png" width="200">
 
 ## Myth Maker
 ### A guided framework for LLM text adventures.
