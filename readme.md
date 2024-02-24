@@ -1,36 +1,6 @@
-# THIS IS VERY WIP! COME BACK LATER!
+![The Myth Maker](https://github.com/HenryHolloway/MythMaker/blob/main/assets/TheMythMaker.png)
 
+## Myth Maker
+### A guided framework for LLM text adventures.
 
-Aspirational Architecture:
-
-```
-text_adventure_game/
-│
-├── assets/
-│   ├── backgrounds/
-│   ├── characters/
-│   └── items/
-│
-├── src/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── game_engine.py
-│   ├── ai/
-│   │   ├── __init__.py
-│   │   ├── llm_interaction.py
-│   │   ├── image_generation.py
-│   │   └── inventory_management.py
-│   │
-│   ├── database/
-│   │   ├── __init__.py
-│   │   ├── character_db.py
-│   │   └── inventory_db.py
-│   │
-│   └── ui/
-│       ├── __init__.py
-│       └── application_ui.py
-│   
-└── tests/
-    ├── __init__.py
-    └── test_cases_for_modules.py
-```
+Please note that this project is still work in progress. It is currently non functional.
