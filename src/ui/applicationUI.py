@@ -5,8 +5,9 @@ import tkinter as tk
 from tkinter import scrolledtext
 from PIL import Image, ImageTk
 
-class MythMaker:
-    def __init__(self, master):
+class appUI:
+    def __init__(self, master, input_callback):
+        self.input_callback = input_callback
         self.master = master
         master.title("Text Adventure Game")
         
@@ -33,9 +34,11 @@ class MythMaker:
     def send_message(self, event):
         user_text = self.user_input.get()
         self.chat_window.insert(tk.END, "You: " + user_text + "\n")
-        # Here you would include the logic or function calls for the AI to respond
-        # For demonstration purposes, it just echoes the user's text
-        self.chat_window.insert(tk.END, "AI: " + user_text + "\n")
+        
+        # Use the callback to process the input through GameEngine
+        if self.input_callback:
+            self.input_callback(user_text)
+        
         self.user_input.delete(0, tk.END)
 
     def display_stage(self, background_image_path, character_images=[]):

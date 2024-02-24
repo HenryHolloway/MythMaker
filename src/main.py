@@ -1,8 +1,18 @@
+import tkinter as tk
 from gameEngine import GameEngine
 
 def main():
-    game_engine = GameEngine()
+    # Create the root window for Tkinter
+    root = tk.Tk()
+    root.title("Myth Maker")
+    root.geometry("800x600")  # Example window size, adjust as needed
+    
+    # Initialize the GameEngine with Tkinter root as master
+    game_engine = GameEngine(master=root)
     game_engine.start_game()
+
+    # Start the Tkinter main loop
+    root.mainloop()
 
 if __name__ == "__main__":
     main()
