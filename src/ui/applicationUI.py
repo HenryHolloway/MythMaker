@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import scrolledtext
 from PIL import Image, ImageTk
 
-class TextAdventureApp:
+class MythMaker:
     def __init__(self, master):
         self.master = master
         master.title("Text Adventure Game")
