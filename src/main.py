@@ -5,7 +5,7 @@ def main():
     # Create the root window for Tkinter
     root = tk.Tk()
     root.title("Myth Maker")
-    root.geometry("800x600")  # Example window size, adjust as needed
+    root.geometry("1920x1080")  # Example window size, adjust as needed
     
     # Initialize the GameEngine with Tkinter root as master
     game_engine = GameEngine(master=root)

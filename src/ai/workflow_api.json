@@ -1,7 +1,7 @@
 {
   "3": {
     "inputs": {
-      "seed": 314307448448003,
+      "seed": 311072376514464,
       "steps": 20,
       "cfg": 4,
       "sampler_name": "euler_ancestral",
@@ -31,7 +31,7 @@
   },
   "6": {
     "inputs": {
-      "text": "evening sunset scenery blue sky nature, glass bottle with a fizzy ice cold freezing rainbow liquid in it",
+      "text": "(white background) (surreal cartoon cel shaded) a man wearing a jacket",
       "clip": [
         "41",
         1
@@ -75,7 +75,7 @@
     "inputs": {
       "filename_prefix": "ComfyUI",
       "images": [
-        "8",
+        "48",
         0
       ]
     },
@@ -86,7 +86,7 @@
   },
   "33": {
     "inputs": {
-      "seed": 183495397600639,
+      "seed": 619332714505175,
       "steps": 10,
       "cfg": 1.1,
       "sampler_name": "euler_ancestral",
@@ -117,7 +117,7 @@
   "34": {
     "inputs": {
       "width": 1024,
-      "height": 1024,
+      "height": 576,
       "compression": 42,
       "batch_size": 1
     },
@@ -158,6 +158,31 @@
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
       "title": "Load Checkpoint"
+    }
+  },
+  "47": {
+    "inputs": {
+      "model_name": "4xUltrasharp_4xUltrasharpV10.pt"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "48": {
+    "inputs": {
+      "upscale_model": [
+        "47",
+        0
+      ],
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Upscale Image (using Model)"
     }
   }
 }

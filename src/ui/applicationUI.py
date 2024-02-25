@@ -1,6 +1,3 @@
-# gpt boilerplate, needs to be refactored & cleaned
-
-
 import tkinter as tk
 from tkinter import scrolledtext
 from PIL import Image, ImageTk
@@ -9,37 +6,51 @@ class appUI:
     def __init__(self, master, input_callback):
         self.input_callback = input_callback
         self.master = master
-        master.title("Text Adventure Game")
         
         # Set the stage for image display
-        self.stage_frame = tk.Frame(master, width=600, height=400)
-        self.stage_frame.pack_propagate(0)  # To prevent the frame from resizing itself
+        self.stage_frame = tk.Frame(master, width=1920, height=304)
+        self.stage_frame.pack_propagate(0)  # Prevent the frame from auto-resizing
         self.stage_frame.pack()
         
         # Placeholder for where images will be displayed
         self.stage_label = tk.Label(self.stage_frame)
         self.stage_label.pack(fill="both", expand=True)
         
-        # Chat window for AI interaction below the stage
+        # Chat window for AI interaction
         self.chat_frame = tk.Frame(master, height=200)
-        self.chat_frame.pack(fill="x", side="bottom")
+        self.chat_frame.pack(fill="both", expand=True, side="top")  # Fill available space
         
         self.chat_window = scrolledtext.ScrolledText(self.chat_frame, wrap=tk.WORD)
-        self.chat_window.pack(fill="both", expand=True)
+        self.chat_window.pack(side="left", fill="both", expand=True)
         
-        self.user_input = tk.Entry(master)
-        self.user_input.pack(fill="x", side="bottom")
+        # Frame for user input and submit button
+        self.input_frame = tk.Frame(master)
+        self.input_frame.pack(fill="x", side="bottom")
+        
+        self.user_input = tk.Entry(self.input_frame)  # Parent is now self.input_frame
+        self.user_input.pack(side="left", fill="x", expand=True)
+        
+        self.submit_button = tk.Button(self.input_frame, text="Submit", command=self.trigger_send_message)
+        self.submit_button.pack(side="right")
+        
         self.user_input.bind("<Return>", self.send_message)
     
+    def trigger_send_message(self):
+        # This method will simulate pressing Enter or clicking the Submit button
+        self.send_message(None)
+        
     def send_message(self, event):
         user_text = self.user_input.get()
-        self.chat_window.insert(tk.END, "You: " + user_text + "\n")
-        
-        # Use the callback to process the input through GameEngine
-        if self.input_callback:
-            self.input_callback(user_text)
-        
-        self.user_input.delete(0, tk.END)
+        if user_text.strip():  # Ensure we don't process empty strings
+            self.chat_window.insert(tk.END, "You: " + user_text + "\n")
+            
+            # Use the callback to process the input through GameEngine
+            if self.input_callback:
+                self.input_callback(user_text)
+            
+            self.user_input.delete(0, tk.END)  # Ensure this happens after processing
+        self.user_input.focus_set()  # Set focus back to the input field
+
 
     def display_stage(self, background_image_path, character_images=[]):
         # Load and display the background image

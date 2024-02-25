@@ -29,9 +29,8 @@ class GameEngine:
     def start_game(self):
         # Display initial game UI/setup
         self.ui.display_stage(self.background, self.characters)
-        self.process_turn()
 
-    def process_turn(self):
+    def process_turn(self, user_input):
     # Instead of looping here, process the received input once, update the game state, and wait for the next event
         # llm_response = self.llm_interaction.process_input(user_input)
 
