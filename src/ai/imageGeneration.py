@@ -66,3 +66,9 @@ def generateImage(prompt):
 
 # TO DO: 
 # flow for processing character images: i.e. prompt with a white bakcground and then automate to key it out so that we have a character image on a transparent background
+
+def generateCharacterImage(prompt):
+    pass
+
+def generateBackgroundImage(prompt):
+    pass
