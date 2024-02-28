@@ -5,16 +5,18 @@ from src.database.locationDB import *
 from src.ai.textGeneration import *
 from src.ai.imageGeneration import generateBackgroundImage, generateCharacterImage
 
+import asyncio
 
 #this will handle prompting the LLM for story, inventory checks, image generation etc.
 
 #TO DO logging. verbose with print
 
-def generateAdventureStart():
-    
+async def generateAdventureStart(message_callback):
+    print("Called function generateAdventureStart in module brain")
+
     #TO DO add inventory specifics to these templates.
     
-    firstPromptTemplates = ["You stand before the mouth of a gaping cave, hidden by the thick underbrush at the mountain's base. The air is cool and carries a faint, musty odor that wafts from the darkness ahead. Moss and small flowers cluster around the rocks, making the entrance almost inviting, despite the unknown lying within. Your torch flickers as a gentle breeze caresses your face, and the sound of dripping water echoes from the depths. What would you like to do?",
+    examples = ["You stand before the mouth of a gaping cave, hidden by the thick underbrush at the mountain's base. The air is cool and carries a faint, musty odor that wafts from the darkness ahead. Moss and small flowers cluster around the rocks, making the entrance almost inviting, despite the unknown lying within. Your torch flickers as a gentle breeze caresses your face, and the sound of dripping water echoes from the depths. What would you like to do?",
 
     "The grandeur of the royal court unfolds before you as you step through the towering, ornate doors. Vaulted ceilings adorned with gold leaf and magnificent chandeliers loom overhead, casting a warm glow over the bustling assembly of nobles, knights, and emissaries. The king, seated upon his majestic throne at the far end of the hall, notices your arrival and gestures subtly for you to approach. Murmurs fill the air, and many eyes turn to follow your progress down the long, red carpet. What would you like to do?",
 
@@ -34,8 +36,20 @@ def generateAdventureStart():
 
     #basically just generate one more!
 
+    prompt = "Please generate a 10th item for this list:\n"
+
+    # Iterate through each string in the list
+    for index, example in enumerate(examples, start=1):
+        # Print each string with its number in front
+        prompt += (f"{index}. {example}")
+
+
+    conversation = [{"role": "user", "content": prompt}]
+
+
+    await send_message_and_stream_response(conversation, message_callback)
+
     
-    pass
 
 
 

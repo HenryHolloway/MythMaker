@@ -2,13 +2,16 @@ import tkinter as tk
 from tkinter import scrolledtext
 from PIL import Image, ImageTk
 import json
+import threading
+import asyncio
+
+import src.ai.brain as brain
 
 class appUI:
     def __init__(self, master, input_callback, conversation):
         self.input_callback = input_callback
         self.master = master
-        self.conversation = conversation  # Initialize conversation storage
-        
+        self.conversation = conversation
 
         # Set the stage for image display
         self.stage_frame = tk.Frame(master, width=1920, height=304)
@@ -40,30 +43,49 @@ class appUI:
         self.user_input.bind("<Return>", self.send_message)
 
 
+
+
     def trigger_send_message(self):
         self.send_message(None)
 
 
     def send_message(self, event):
         user_text = self.user_input.get().strip()
-        if user_text:  # Process non-empty strings
-            self.append_message("You", user_text, "#FFFFFF")
-            # Directly trigger the processing, without reassigning self.conversation
+
+        if user_text:
+            print("User said: " + user_text)
+            self.append_message("user", user_text)
+
             self.input_callback(self.conversation)  # self.input_callback should be bound to GameEngine.process_turn
-            # Note: Consider how GameEngine.process_turn handles the conversation
+
             self.user_input.delete(0, tk.END)  # Clear input field after processing
         self.user_input.focus_set()  # Refocus on the input field
     
-    def append_message_and_update(self, speaker, text, color):
+
+    def append_message_and_update(self, speaker, text):
+        print("Appending message and updating conversation window.")
         def task():
-            self.append_message(speaker, text, color)
+            self.append_message(speaker, text)
         # This ensures that Tkinter's operations remain in the main thread
         self.master.after(0, task)
 
-    def append_message(self, speaker, text, bg_color):
-        self.conversation.append({"speaker": speaker, "text": text, "color": bg_color})
-        self.update_chat_display()  # Update display after every new message
 
+    def append_message(self, speaker, text):
+        if self.conversation:  # Check if conversation list is not empty
+            last_message = self.conversation[-1]  # Get the last message
+            # Check if the last message was from "assistant" and the current speaker is also "assistant"
+            if last_message["role"] == "assistant" and speaker == "assistant":
+                # Append the new text to the last message's content
+                last_message["content"] +=  text  # Adding a space for readability
+            else:
+                # If last speaker was not "assistant" or the current speaker is not "assistant",
+                # append the new message as a new entry
+                self.conversation.append({"role": speaker, "content": text})
+        else:
+            # If the conversation list is empty, just append the message
+            self.conversation.append({"role": speaker, "content": text})
+        
+        self.update_chat_display()  # Update display after every new message
 
     def update_chat_display(self):
         self.chat_window.config(state=tk.NORMAL)  # Enable editing to update content
@@ -71,9 +93,13 @@ class appUI:
 
         for i, msg in enumerate(self.conversation):
             tag_name = f"tag_{i}"
-            self.chat_window.tag_configure(tag_name, background=msg["color"], lmargin1=10, lmargin2=10, rmargin=10, spacing3=10)
+            if msg["role"] == "user":
+                color = "#808080"
+            elif msg["role"] == "assistant":
+                color = "#EEEEEE"
+            self.chat_window.tag_configure(tag_name, background=color, lmargin1=10, lmargin2=10, rmargin=10, spacing3=10)
             
-            content = f"{msg['speaker']}: {msg['text']}\n\n"
+            content = f"{msg['role']}: {msg['content']}\n\n"
             self.chat_window.insert(tk.END, content, tag_name)
 
         self.chat_window.config(state=tk.DISABLED)  # Disable editing after update

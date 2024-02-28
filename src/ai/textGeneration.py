@@ -3,11 +3,14 @@ import asyncio
 import json
 
 async def send_message_and_stream_response(conversation, message_callback):
+    print("Send & stream called.")
     # Simulation of constructing a payload with the entire conversation history
     payload = {
         "model": "openchat",
         "messages": conversation,  # Use provided conversation history
     }
+
+    print("Payload: " , payload)
 
     # Assuming your ollama endpoint and providing it with the full conversation
     async with aiohttp.ClientSession() as session:
@@ -17,9 +20,11 @@ async def send_message_and_stream_response(conversation, message_callback):
                 if line.strip():  # Filter out keep-alive chunks
                     decoded_line = json.loads(line.decode('utf-8'))
                     message = decoded_line.get('message', {})
+                    print(message)
                     if message:
                         # Invoke the callback for each received part of the response
-                        message_callback("AI", message['content'], "#EEEEEE")
+                        print(message['content'])
+                        message_callback("assistant", message['content'])
 
                     if decoded_line.get('done'):
                         break
@@ -28,9 +33,9 @@ async def send_message_and_stream_response(conversation, message_callback):
 async def test_send_message_and_stream_response():
     conversation = [{"role": "user", "content": "Hi, how are you?"}]
 
-    def message_callback(sender, message, color):
+    def message_callback(sender, message):
         # Adapt this function to log or print the message information to validate the behavior
-        print(f"Received message from {sender} with content '{message}' and color {color}")
+        print(f"Received message from {sender} with content '{message}'")
 
     # This line directly calls the function with the provided inputs.
     await send_message_and_stream_response(conversation, message_callback)
