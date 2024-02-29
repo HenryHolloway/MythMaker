@@ -7,8 +7,9 @@ import asyncio
 
 import src.ai.brain as brain
 
+
 class appUI:
-    def __init__(self, master, input_callback, conversation):
+    def __init__(self, master, input_callback, reset, conversation):
         self.input_callback = input_callback
         self.master = master
         self.conversation = conversation
@@ -40,6 +41,9 @@ class appUI:
         self.submit_button = tk.Button(self.input_frame, text="Submit", command=self.trigger_send_message)
         self.submit_button.pack(side="right")
 
+        self.reset_button = tk.Button(master, text="Reset Game", command=reset)
+        self.reset_button.pack(side="right")
+
         self.user_input.bind("<Return>", self.send_message)
 
 
@@ -62,12 +66,15 @@ class appUI:
         self.user_input.focus_set()  # Refocus on the input field
     
 
-    def append_message_and_update(self, speaker, text):
+    def append_message_and_update(self, speaker, text, done=True):
         print("Appending message and updating conversation window.")
         def task():
             self.append_message(speaker, text)
         # This ensures that Tkinter's operations remain in the main thread
         self.master.after(0, task)
+
+        if done:
+            return True
 
 
     def append_message(self, speaker, text):
@@ -87,6 +94,7 @@ class appUI:
         
         self.update_chat_display()  # Update display after every new message
 
+
     def update_chat_display(self):
         self.chat_window.config(state=tk.NORMAL)  # Enable editing to update content
         self.chat_window.delete("1.0", tk.END)  # Clear existing content
@@ -94,15 +102,26 @@ class appUI:
         for i, msg in enumerate(self.conversation):
             tag_name = f"tag_{i}"
             if msg["role"] == "user":
-                color = "#808080"
+                background_color = "#808080"
+                font_color = "#FFFFFF"  # White font color for user messages
             elif msg["role"] == "assistant":
-                color = "#EEEEEE"
-            self.chat_window.tag_configure(tag_name, background=color, lmargin1=10, lmargin2=10, rmargin=10, spacing3=10)
+                background_color = "#EEEEEE"
+                font_color = "#000000"  # Black font color for assistant messages
+            elif msg["role"] == "system":
+                background_color = "#000000"
+                font_color = "#FFFFFF"  # White font color for system messages
+
+            self.chat_window.tag_configure(tag_name, background=background_color, foreground=font_color, lmargin1=10, lmargin2=10, rmargin=10, spacing3=10)
             
-            content = f"{msg['role']}: {msg['content']}\n\n"
+            content = ""
+            if msg["role"] != "user": 
+                content += f"{msg['content']}\n\n"
+            else:
+                content += f"{msg['role']}:{msg['content']}\n\n"
             self.chat_window.insert(tk.END, content, tag_name)
 
         self.chat_window.config(state=tk.DISABLED)  # Disable editing after update
+        self.chat_window.yview_moveto(1.0)  # Scroll to the bottom
 
 
     def display_stage(self, background_image_path, character_images=[]):

@@ -1,5 +1,6 @@
 import aiohttp
 import asyncio
+import requests
 import json
 
 async def send_message_and_stream_response(conversation, message_callback):
@@ -23,12 +24,46 @@ async def send_message_and_stream_response(conversation, message_callback):
                     print(message)
                     if message:
                         # Invoke the callback for each received part of the response
-                        print(message['content'])
-                        message_callback("assistant", message['content'])
+                        message_callback("assistant", message['content'], decoded_line.get('done'))
 
                     if decoded_line.get('done'):
                         break
 
+
+
+def send_message_and_static_response(conversation, json=False):
+    print("Send & static called.")
+    # Simulation of constructing a payload with the entire conversation history
+    payload = {
+        "model": "openchat",
+        "messages": conversation,
+        "stream": False
+    }
+
+    if json:
+        payload["format"] = "json"
+
+
+    response = requests.post("http://localhost:11434/api/chat", json=payload)
+    if response.status_code == 200:
+        response_data = response.json()
+        print("Response: ", response_data)
+        print(response_data.get("done"))
+        if response_data.get("done"):
+            return response_data.get("message")
+    else:
+        print("Failed to get response from the server.")
+        return NULL
+
+
+
+
+
+def test_send_message_and_static_response():
+    conversation = [{"role": "user", "content": "Why is the sky blue?"}]
+
+    # This line directly calls the function with the provided inputs.
+    print("Returned from send massage: ", send_message_and_static_response(conversation))
 
 async def test_send_message_and_stream_response():
     conversation = [{"role": "user", "content": "Hi, how are you?"}]
@@ -40,5 +75,8 @@ async def test_send_message_and_stream_response():
     # This line directly calls the function with the provided inputs.
     await send_message_and_stream_response(conversation, message_callback)
 
+
 if __name__ == "__main__":
-    asyncio.run(test_send_message_and_stream_response())
+    #asyncio.run(test_send_message_and_stream_response())
+    test_send_message_and_static_response()
+

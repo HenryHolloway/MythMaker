@@ -3,6 +3,10 @@ import src.ai.brain as brain
 
 from src.ai.textGeneration import send_message_and_stream_response
 
+import src.database.characterDB as characterDB
+import src.database.inventoryDB as inventoryDB
+import src.database.locationDB as locationDB
+
 import os
 import json
 import threading
@@ -30,30 +34,52 @@ class GameEngine:
 
         #self.inventory = self.inventory_db.load_inventory()
 
-        self.conversation = []
+        self.conversation = [{"role": "system", "content": "Loading!"}]
 
-        self.ui = appUI(master=master, input_callback=self.process_turn, conversation=self.conversation)
+        self.ui = appUI(master=master, input_callback=self.process_turn, reset=self.reset_game, conversation=self.conversation)
 
     def save_conversation(self, filepath="conversation.json"):
         with open(filepath, "w") as file:
             json.dump(self.conversation, file, indent=4)
 
 
-    async def load_conversation(self, filepath="conversation.json"):
+    def load_conversation(self, filepath="conversation.json"):
         try:
             with open(filepath, "r") as file:
-                return json.load(file)
+                file_content = file.read()
+                if file_content == "[]":
+                    print("Conversation file not found. Starting a new conversation.")
+                    self.start_new_conversation_thread()
+                    return []
+                else:
+                    return json.loads(file_content)  # Use json.loads to parse the string content
         except FileNotFoundError:
-            print("Conversation file not found. Starting a new conversation.")
-            await brain.generateAdventureStart(self.ui.append_message_and_update)
+            print("File not found. Creating a new conversation file.")
+            self.start_new_conversation_thread()
             return []
+
+    def start_new_conversation_thread(self):
+        self.clear_initial_loading_message() 
+        threading.Thread(target=self.call_async_generate_adventure_start, daemon=True).start()
+
+    def clear_initial_loading_message(self):
+        if self.conversation and self.conversation[0]["content"] == "Loading!":
+            self.conversation.pop(0)  # Remove the first message if it is the "Loading!" message
+
+    def call_async_generate_adventure_start(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(brain.generateAdventureStart(self.ui.append_message_and_update))
+        loop.close()
 
     async def start_game_async(self):
         # Display initial game UI/setup
         self.ui.display_stage(self.background, self.characters)
-        
+
+        self.ui.master.update_idletasks()        
+
         # Load conversation after UI is ready
-        self.conversation = await self.load_conversation()
+        self.conversation = self.load_conversation()
 
     def start_game(self):
         # Since start_game is synchronous, use asyncio to run the asynchronous version
@@ -69,10 +95,9 @@ class GameEngine:
         threading.Thread(target=self.call_async_process, args=(conversation,), daemon=True).start()
         print("Thread started.")
 
-    def call_async_process(self, conversation):
-        self.save_conversation()
-        self.call_async_send_stream(conversation)
 
+    def call_async_process(self, conversation):
+        self.call_async_send_stream(conversation)
 
 
     def call_async_send_stream(self, conversation):
@@ -82,6 +107,28 @@ class GameEngine:
         print("Calling async send & stream.")
         loop.run_until_complete(send_message_and_stream_response(conversation, self.ui.append_message_and_update))
         loop.close()
+
+
+    def reset_game(self):
+        print("reset_game called.")
+        self.conversation = []
+        self.save_conversation()
+        print("Conversation cleared and saved.")
+
+        self.ui.conversation = self.conversation
+        self.ui.update_chat_display()
+        self.ui.master.update_idletasks()        
+        print("Update chat display called.")
+
+        characterDB.resetCharacterDB()
+        inventoryDB.resetInventoryDB()
+        locationDB.resetLocationDB()
+
+        print("Databases reset.")
+
+        print("Calling start_game()")
+        self.start_game()
+        
 
 
 
