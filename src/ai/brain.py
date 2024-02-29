@@ -18,23 +18,24 @@ async def generateAdventureStart(message_callback):
     #TO DO add inventory specifics to these templates.
     
     examples = [
-    "You stand before the mouth of a gaping cave, hidden by the thick underbrush at the mountain's base. The air is cool and carries a faint, musty odor that wafts from the darkness ahead. Moss and small flowers cluster around the rocks, making the entrance almost inviting, despite the unknown lying within. Your torch flickers as a gentle breeze caresses your face, and the sound of dripping water echoes from the depths. In your leather satchel, you find a flint and steel, a length of rope, a small dagger, and a crust of bread. What would you like to do?",
+    "Your journey to the caverns of Algorath begins as you stand before the entrance, with tales of ancient magic and untold riches fueling your resolve. The land is split by an eternal twilight, casting long shadows and brilliant hues across the landscape. Your objective is clear, but the path is yours to choose. In your leather satchel, you find: \n- A Whispering Blade \n- 12 Echoing Shards \n- A lantern that burns without oil \n- A parchment with cryptic inscriptions. \nWhat would you like to do?",
     
-    "The grandeur of the royal court unfolds before you as you step through the towering, ornate doors. Vaulted ceilings adorned with gold leaf and magnificent chandeliers loom overhead, casting a warm glow over the bustling assembly of nobles, knights, and emissaries. The king, seated upon his majestic throne at the far end of the hall, notices your arrival and gestures subtly for you to approach. Murmurs fill the air, and many eyes turn to follow your progress down the long, red carpet. Clasped in your hand is a sealed parchment bearing the royal seal, a gift of fine silk in your sack, and a ring of introduction from a distant land. What would you like to do?",
+    "Welcome to Erendorn, a bustling city where the arcane and the mundane intertwine under the watchful eyes of the Archmages. As you navigate through the crowded streets, whispers of power struggles and dark secrets reach your ears. Your destiny awaits, but how you reach it is yet to be written. In your possessions, you discover: \n- An Archmage's Wand \n- 15 Gilded Feathers \n- A miniature mechanical bird \n- A sealed envelope with a mysterious insignia. \nWhat would you like to do?",
     
-    "Surrounded by the towering, ancient trees of the enchanted forest, you are bathed in a kaleidoscope of light filtering through the leaves, painting the world in hues of green and gold. The air is alive with the whispers of the forest; the songs of birds, the rustle of hidden creatures, and the gentle hum of magic. Ahead, a clear, sparkling stream cuts through the woods, dancing over rocks and under bridges made from intertwining branches. To your right, a narrow path veers off, disappearing into clusters of luminescent flowers and thickets of berry-laden bushes. Tucked in your cloak, you find a map of unknown lands, a compass that doesn’t point north, and a flask of enchanted water that promises to heal. What would you like to do?",
+    "The mystic forests of Fae'lyn envelop you, a realm where the ancient trees are said to be guardians of powerful secrets. The air is thick with magic, and every leaf and stone seems to watch your every move. Paths both hidden and visible stretch before you, inviting exploration. Among your belongings are: \n- A Bow of the Verdant Guardian \n- 10 Luminous Seeds \n- A scroll of the woodland path \n- A flask of moonwell water. \nWhat would you like to do?",
     
-    "As you tread the dusty, cobblestone streets of the bustling city, a cacophony of sounds fills your ears; the clattering of horse hooves, the lively banter of market vendors, and the distant tolling of a church bell. The scent of spices and roasting meat wafts from the food stalls, while beggars and street performers jostle for space at your feet. Ahead, you can see the imposing city gates, guarded by armed soldiers in shiny armor. Beyond them lies the unknown world beyond the city walls, a land of mystery and adventure. Within your coat pocket, you find a handful of copper coins, a tin whistle said to call upon the city's unseen protectors, and a worn leather-bound journal filled with notes and sketches. What would you like to do?",
+    "Zephyr, the merchant city, teems with life, its streets a testament to the wealth and diversity it harbors. Here, fortunes can be made or lost with a single deal, and your wits will be your greatest asset. Adventure calls from every corner, promising both peril and reward. In your coat pocket, you find: \n- A Merchant's Cane \n- 18 Zephyrian Coins \n- A ledger capturing debts owed to you \n- A cloak woven with threads of concealment. \nWhat would you like to do?",
     
-    "You find yourself standing on the edge of an arid desert, with nothing but rolling sand dunes stretching out as far as the eye can see. The scorching sun beats down upon your back, and the air is thick with dust and heat. In the distance, a shimmering mirage teases you, enticing you to venture forth into the unforgiving sands. To your left, an ancient, weather-beaten caravan lays scattered across the desert floor, its inhabitants nowhere to be seen. Strapped to your back is a water skin, nearly empty, alongside a curved scimitar, a compass, and a wide-brimmed hat to shield you from the sun's merciless rays. What would you like to do?",
+    "The Searing Expanse stretches before you, a vast desert of rolling dunes and scorching sun. Legends tell of ancient cities buried beneath the sands, awaiting discovery by those brave enough to face the desert's wrath. Your journey across the sands will be demanding, yet potentially rewarding. Your gear includes: \n- A Sunforged Scimitar \n- 14 Sunswept Gems \n- A sunshade cloak \n- A serpent charm. \nWhat would you like to do?",
     
-    "In the tranquil depths of a subterranean ocean, you glide through the inky blackness, illuminated by the delicate glow of bioluminescent creatures that flit about your path like fireflies. The gentle current carries you along, and you marvel at the strange, alien forms of marine life that surround you; giant jellyfish with tentacles as long as your arm, schools of iridescent fish darting through kelp forests, and the occasional glimpse of a massive, unseen beast lurking in the shadows. Clipped to your belt, a waterproof pouch contains a mysterious, ancient key, a small knife with a handle carved from bone, and a crystal that pulses softly with its own inner light. What would you like to do?",
+    "Beneath the tranquil surface of Mirror Lake lies a world of wonder and danger, illuminated by the glow of bioluminescent creatures. The lake's depths are uncharted, hiding secrets in the dark water. Your exploration will reveal the mysteries that lie beneath. You carry: \n- A Trident of Currents \n- 16 Pearl Coins \n- A waterproof satchel with a map of underwater caverns \n- A potion for breathing under the depths. \nWhat would you like to do?",
     
-    "You awake in a dimly lit, cobweb-filled room, your memory foggy and your body aching from some unremembered ordeal. The only light comes from a flickering candle on the table beside you, casting eerie shadows across the dusty floor. A heavy, iron door stands before you, adorned with ancient symbols and locked fast by rusted chains. An unsettling silence hangs in the air, broken only by the distant sound of dripping water. On the floor beside you, there's a backpack containing a scroll of ancient lore, a lockpick set, and a potion of strength. What would you like to do?",
+    "The echoes of your footsteps fill the air as you awaken in the forgotten halls of Castle Moragath. The castle, shrouded in mystery and darkness, calls to those with the courage to uncover its secrets. What lies within these walls is a tale yet to be told, and your story begins now. In your grasp, you find: \n- A Torchbearer's Halberd \n- 10 Shadow Shillings \n- A locket that glows faintly \n- A tome filled with lost lore. \nWhat would you like to do?",
     
-    "Standing atop a rickety wooden tower that pierces the sky, you feel the cool wind whipping through your hair as the world below stretches out before you. The sun sets in a fiery blaze over the horizon, casting long shadows across the rolling hills and sparkling rivers below. A sense of exhilaration fills your chest as you consider the endless possibilities that lay within your grasp. Tied around your waist, a satchel reveals an assortment of provisions; a spyglass, a bundle of arrows, and a map marked with a location labeled 'The Lost City.' What would you like to do?",
+    "High above the land, atop the Eagle's Cradle, the world appears vast and unending. The winds carry tales of distant lands and forgotten cities, beckoning you to explore the unknown. The sky is both a map and a mystery, and your adventure is just beginning. Tied around your waist, you have: \n- A Windwhisper Crossbow \n- 20 Stormfeather Tokens \n- A spyglass that sees beyond horizons \n- Gauntlets that steady your aim. \nWhat would you like to do?",
     
-    "Stranded on a desolate island with nothing but your wits and a few basic supplies, you find yourself at the mercy of nature's whims. The relentless sun beats down upon you while the ocean roars in the distance, reminding you that escape may not be an easy task. Yet, amidst this desolation, there is beauty to be found; lush vegetation, crystal-clear streams, and even occasional visits from curious wildlife. Clutched in your fist, a survival knife, a fire starter, a small fishing net, and a journal for documenting the island's secrets. What would you like to do?"]
+    "The Emerald Exile, a dense jungle teeming with life and peril, stands before you as the ultimate test of survival and ingenuity. Ancient ruins lie hidden under the canopy, home to treasures and traps alike. Your journey through the jungle will be filled with challenges, both seen and unseen. You are equipped with: \n- A Vine-Tangled Staff \n- 11 Jungle Jades \n- A camouflaged tarp \n- A trapping kit. \nWhat would you like to do?"]
+
 
     #basically just generate one more!
 
@@ -103,7 +104,7 @@ def changeInventory(conversation):
             break
 
     
-    prompt = "You are in charge of inventory management for an adventure game! The user currently has the following inventory items: "
+    prompt = "You are in charge of inventory management for an adventure game! Our last record of the user's inventory is as follows: "
 
     #check if oldInventory is empty
     if not oldInventory:
@@ -115,15 +116,15 @@ def changeInventory(conversation):
     if user_response != "":
         prompt += "\n\nMost recent user action: " + user_response
     
-    prompt += "\nMost recent AI action: " + assistant_response + "\n\nPlease provide the updated contents of the user inventory after their turn. Think critically -- did the user consume or disperse any items? Did the AI give the user any items, or take any away? Please provide the updated inventory as a CSV formatted list. Your response should contain only inventory items and commas."
+    prompt += "\nMost recent AI action: " + assistant_response + "\n\nPlease provide the updated contents of the user inventory after their turn. Think critically -- what happened in the last turn? Remember, anything and everything that is handed to or taken from the player must be accounted for. Your job isn't to pass judgement, you are simply an incredibly dilligent and accurate record keeper. Provide a JSON-formatted response following this template: {'justification':'why you think the inventory changed or did not change. be specific, use chain-of-thought reasoining.','inventory':'Formatted as Item 1,Item 2,Item 3 or NULL' }"
 
     conversation = [{"role": "user", "content": prompt}]
 
-    response = send_message_and_static_response(conversation)
+    response = send_message_and_static_response(conversation, json=True)
     print("Raw response: ", response["content"])
 
     # Scrape inventory from response
-    newInventory = response["content"]
+    newInventory = json.loads(response["content"])["inventory"]
     if ":" in newInventory:
         newInventory = newInventory.split(":", 1)[1]
     newInventory = newInventory.strip().strip('\'"()[]{}')
@@ -156,7 +157,7 @@ def createCharacter():
     pass
 
 
-def rollDice(n, threshold):
+def rollDice(threshold, dice_size):
     """
     Rolls a dice with 'n' sides and checks if the result is above a given threshold.
     
@@ -167,7 +168,7 @@ def rollDice(n, threshold):
     Returns:
     - int: The number rolled.
     """
-    roll_result = random.randint(1, n)
+    roll_result = random.randint(1, dice_size)
     return roll_result
 
 def determineDiceRoll(conversation):
@@ -202,7 +203,7 @@ def determineDiceRoll(conversation):
 
     prompt += "\n\nMost recent user action: " + user_response
     
-    prompt += "\nPlease provide determine whether a dice roll is required, and if so, what number dice and threshold for success. You must respond in JSON format using the following template: {'reason':'What the user is rolling the dice to accomplish, e.g. unlock chest, convince guard. Usage: (User rolled a 2 while trying to REASON)', 'threshold':'the minimum number the user needs to roll for success', 'dice_size':'The highest number the user can roll'}. If you decide a dice roll is not necessary, leave the reason as 'NULL' and set n and threshold to -1."
+    prompt += "\nPlease provide determine whether a dice roll is required, and if so, what number dice and threshold for success. You must respond in JSON format using the following template: {'reason':'What the user is rolling the dice to accomplish, e.g. unlock chest, convince guard. Usage: (User rolled a 2 while trying to REASON)', 'threshold':'the minimum number the user needs to roll for success', 'dice_size':'The highest number the user can roll'}. If you decide a dice roll is not necessary, leave the reason as 'NULL' and set threshold and dice_size to -1."
 
 
     conversation = [{"role": "user", "content": prompt}]
@@ -211,10 +212,10 @@ def determineDiceRoll(conversation):
     try:
         dice_roll_info = json.loads(response["content"])
         if dice_roll_info["reason"] != "NULL":
-            n = int(dice_roll_info["dice_size"])
             threshold = int(dice_roll_info["threshold"])
-            roll_result = rollDice(n, threshold)
-            result_message = f"The user rolled a {roll_result} while trying to {dice_roll_info['reason'].lower()}. They needed a {dice_roll_info['threshold']}. They {'passed.' if roll_result >= threshold else 'failed.'}"
+            dice_size = int(dice_roll_info["dice_size"])
+            roll_result = rollDice(threshold, dice_size)
+            result_message = f"The user rolled a {roll_result} on a {dice_size}-sided dice while trying to {dice_roll_info['reason'].lower()}. They needed a {threshold}. They {'passed.' if roll_result >= threshold else 'failed.'}"
             return result_message
         else:
             return False

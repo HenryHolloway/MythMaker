@@ -40,7 +40,7 @@ class GameEngine:
 
     def save_conversation(self, filepath="conversation.json"):
         with open(filepath, "w") as file:
-            json.dump(self.conversation, file, indent=4)
+            json.dump(self.ui.conversation, file, indent=4)
 
 
     def load_conversation(self, filepath="conversation.json"):
@@ -52,7 +52,10 @@ class GameEngine:
                     self.start_new_conversation_thread()
                     return []
                 else:
-                    return json.loads(file_content)  # Use json.loads to parse the string content
+                    loaded_conversation = json.loads(file_content)  # Use json.loads to parse the string content
+                    self.ui.conversation = loaded_conversation  # Update the UI's conversation
+                    self.ui.update_chat_display()  # Reflect the loaded conversation in the UI
+                    return loaded_conversation        
         except FileNotFoundError:
             print("File not found. Creating a new conversation file.")
             self.start_new_conversation_thread()
@@ -126,19 +129,27 @@ class GameEngine:
         if newInventory is not False:
             self.ui.append_message_and_update("system", f"Inventory updated: {', '.join(newInventory)}", done=True)
         
+
+        self.save_conversation()
+
+
         loop.close()
 
 
     def reset_game(self):
         print("reset_game called.")
         self.conversation = []
-        self.save_conversation()
-        print("Conversation cleared and saved.")
 
         self.ui.conversation = self.conversation
+        print("Conversation cleared.")
+
         self.ui.update_chat_display()
         self.ui.master.update_idletasks()        
         print("Update chat display called.")
+
+        self.save_conversation()
+        print("Conversation saved.")
+
 
         characterDB.resetCharacterDB()
         inventoryDB.resetInventoryDB()
