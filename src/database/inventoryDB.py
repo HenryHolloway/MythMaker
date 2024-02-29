@@ -8,9 +8,13 @@ def fetchInventory():
 
 
 def writeInventory(inventory):
+    print("Opening inventory.csv for writing.")
     with open('src/database/inventory.csv', 'w') as file:
-        for item in inventory:
-            file.write(','.join(item) + '\n')
+        print("Writing inventory items to the file.")
+        inventoryLine = ','.join(inventory)
+        print(f"Writing inventory line: {inventoryLine}")
+        file.write(inventoryLine)
+        print("Finished writing inventory to file.")
 
 
 def resetInventoryDB():

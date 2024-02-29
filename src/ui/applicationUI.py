@@ -75,6 +75,7 @@ class appUI:
 
         if done:
             return True
+        return False
 
 
     def append_message(self, speaker, text):
@@ -117,7 +118,7 @@ class appUI:
             if msg["role"] != "user": 
                 content += f"{msg['content']}\n\n"
             else:
-                content += f"{msg['role']}:{msg['content']}\n\n"
+                content += f"You: {msg['content']}\n\n"
             self.chat_window.insert(tk.END, content, tag_name)
 
         self.chat_window.config(state=tk.DISABLED)  # Disable editing after update

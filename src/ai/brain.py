@@ -6,6 +6,7 @@ from src.ai.textGeneration import *
 from src.ai.imageGeneration import generateBackgroundImage, generateCharacterImage
 
 import asyncio
+import random
 
 #this will handle prompting the LLM for story, inventory checks, image generation etc.
 
@@ -37,7 +38,7 @@ async def generateAdventureStart(message_callback):
 
     #basically just generate one more!
 
-    prompt = "Please generate another item for this list."
+    prompt = "The following is a list of potential starting prompts for a text adventure game. Please follow the format and produce one more example for the list."
 
     # Iterate through each string in the list
     for index, example in enumerate(examples, start=1):
@@ -72,73 +73,77 @@ def checkLocationChange(user_input):
         return false
 
 
-def checkInventoryChangeUser(user_input):
-    prompt = "The following is a user prompt for an adventure game:\n" + user_input + "\n\nDoes the user acquire any items or disperse any items? This includes money. Answer only with yes or no."
+
+
+def changeInventory(conversation):
+    oldInventory = fetchInventory()
+
+    # Ensure oldInventory is a list of strings
+    if oldInventory and isinstance(oldInventory[0], list):
+        # If oldInventory is a list of lists, flatten it (example solution, adjust based on actual structure)
+        oldInventory = [item for sublist in oldInventory for item in sublist]
+    elif oldInventory and not all(isinstance(item, str) for item in oldInventory):
+        # If oldInventory contains non-string elements, handle the error or convert them to strings
+        print("Error: oldInventory contains non-string elements.")
+        return False
+
+
+    # Initialize variables to hold the most recent user and assistant responses
+    user_response = ""
+    assistant_response = ""
+
+    # Iterate through the conversation to find the most recent user and assistant responses
+    for message in reversed(conversation):
+        if message["role"] == "user" and not user_response:
+            user_response = message["content"]
+        elif message["role"] == "assistant" and not assistant_response:
+            assistant_response = message["content"]
+        # Break the loop if both responses have been found
+        if user_response and assistant_response:
+            break
+
+    
+    prompt = "You are in charge of inventory management for an adventure game! The user currently has the following inventory items: "
+
+    #check if oldInventory is empty
+    if not oldInventory:
+        prompt += "Inventory currently empty."
+
+    else:
+        prompt += ', '.join(oldInventory)
+    
+    if user_response != "":
+        prompt += "\n\nMost recent user action: " + user_response
+    
+    prompt += "\nMost recent AI action: " + assistant_response + "\n\nPlease provide the updated contents of the user inventory after their turn. Think critically -- did the user consume or disperse any items? Did the AI give the user any items, or take any away? Please provide the updated inventory as a CSV formatted list. Your response should contain only inventory items and commas."
 
     conversation = [{"role": "user", "content": prompt}]
 
-    # This line directly calls the function with the provided inputs.
     response = send_message_and_static_response(conversation)
+    print("Raw response: ", response["content"])
 
-    if 'yes' in response:
-        return true
-    if 'no' in response:
-        return false
-
-
-def changeInventoryUser(conversation):
-    user_input = conversation[-1]['content']
-
-    if checkInventoryChangeUser(user_input):
-        oldInventory = fetchInventory()
-
-        prompt = "You are in charge of inventory management for an adventure game! The user currently has the following inventory items: " + oldInventory + "\n\nPlease provide the updated contents of the user inventory after their turn. User's turn:" + user_input + "Please provide the inventory as a CSV; your response should contain only inventory items and commas"
+    # Scrape inventory from response
+    newInventory = response["content"]
+    if ":" in newInventory:
+        newInventory = newInventory.split(":", 1)[1]
+    newInventory = newInventory.strip().strip('\'"()[]{}')
+    newInventory = newInventory.split('\n', 1)[0]
+    print("newInventory ", newInventory)
 
 
-        conversation = [{"role": "user", "content": prompt}]
+    newInventory = newInventory.split(',')
+    print("newInventory listified: ", newInventory)
+    
+    newInventory = [item.strip().title() for item in newInventory]
+    
+    print("newInventory after cleaning: ", newInventory)
+    
+    writeInventory(newInventory)
 
-        response = send_message_and_static_response()
-
-        #scrape inventory from response
-        newInventory = response.split(',')
-
-        writeInventory(newInventory)
-
-
-
-
-def checkInventoryChangeAI(ai_message):
-    prompt = "The following is a prompt for an adventure game:\n" + ai_message + "\n\nDoes the user acquire any items or disperse any items? This includes money. Answer only with yes or no."
-
-    conversation = [{"role": "user", "content": prompt}]
-
-    # This line directly calls the function with the provided inputs.
-    response = send_message_and_static_response(conversation)
-
-    if 'yes' in response:
-        return true
-    if 'no' in response:
-        return false
-
-
-def changeInventoryAI(conversation):
-    ai_message = conversation[-1]['content']
-
-    if checkInventoryChangeUser(user_input):
-        oldInventory = fetchInventory()
-
-        prompt = "You are in charge of inventory management for an adventure game! The user currently has the following inventory items: " + oldInventory + "\n\nPlease provide the updated contents of the user inventory after their turn. User's turn:" + ai_message + "Please provide the inventory as a CSV; your response should contain only inventory items and commas"
-
-
-        conversation = [{"role": "user", "content": prompt}]
-
-        response = send_message_and_static_response()
-
-        #scrape inventory from response
-        newInventory = response.split(',')
-
-        writeInventory(newInventory)
-
+    if set(newInventory) != set(oldInventory):
+        return newInventory
+    else:
+        return False
 
 
 #check if currently talking to a character exists in character db
@@ -151,8 +156,76 @@ def createCharacter():
     pass
 
 
-def rollDice(n): #rolls a dice, random number between 1 and n inclusive
-    pass
+def rollDice(n, threshold):
+    """
+    Rolls a dice with 'n' sides and checks if the result is above a given threshold.
+    
+    Parameters:
+    - n (int): The number of sides on the dice.
+    - threshold (int): The threshold value to compare the roll against.
+    
+    Returns:
+    - int: The number rolled.
+    """
+    roll_result = random.randint(1, n)
+    return roll_result
+
+def determineDiceRoll(conversation):
+    """
+    Determines if the user's most recent prompt and the last AI response require a dice roll to determine success.
+    
+    Parameters:
+    - conversation (list): A list of dictionaries, where each dictionary represents a message in the conversation.
+    
+    Returns:
+    - string: If successful, returns a string containing a description of the dice roll and outcome
+    - bool: If unsuccessful, or if a dice roll is not required, returns False
+    """
+    if not conversation:
+        return False  # No conversation to analyze
+    
+    # Extract the last user prompt and the last AI response
+    user_response = None
+    assistant_response = None
+    for message in reversed(conversation):
+        if message["role"] == "user" and user_response is None:
+            user_response = message["content"]
+        elif message["role"] == "assistant" and assistant_response is None:
+            assistant_response = message["content"]
+        if user_response and assistant_response:
+            break
+    
+    
+    prompt = "You are a game master AI for a text-based adventure game. You specialize in determining when dice-rolls are necessary for a user's turn. Dice rolls are required for various chance-based actions. Combat actions like attacking an enemy, defending against an attack,performing a stealth action, casting a spell, etc. Exploration Actions such as climbing a steep cliff, disarming a trap, unlocking a treasure chest, etc. Social interactions like persuading a guard to let you pass, bartering with a merchant, gathering information from a local, convincing an NPC to join your quest.\n\nThe following are the two most recent actions in the story:"
+
+    prompt += "\nMost recent AI action: " + assistant_response
+
+    prompt += "\n\nMost recent user action: " + user_response
+    
+    prompt += "\nPlease provide determine whether a dice roll is required, and if so, what number dice and threshold for success. You must respond in JSON format using the following template: {'reason':'What the user is rolling the dice to accomplish, e.g. unlock chest, convince guard. Usage: (User rolled a 2 while trying to REASON)', 'threshold':'the minimum number the user needs to roll for success', 'dice_size':'The highest number the user can roll'}. If you decide a dice roll is not necessary, leave the reason as 'NULL' and set n and threshold to -1."
+
+
+    conversation = [{"role": "user", "content": prompt}]
+    response = send_message_and_static_response(conversation, json=True)
+
+    try:
+        dice_roll_info = json.loads(response["content"])
+        if dice_roll_info["reason"] != "NULL":
+            n = int(dice_roll_info["dice_size"])
+            threshold = int(dice_roll_info["threshold"])
+            roll_result = rollDice(n, threshold)
+            result_message = f"The user rolled a {roll_result} while trying to {dice_roll_info['reason'].lower()}. They needed a {dice_roll_info['threshold']}. They {'passed.' if roll_result >= threshold else 'failed.'}"
+            return result_message
+        else:
+            return False
+    except (ValueError, KeyError):
+        return False
+
+
+    
+
+    
+
 
 
 def processTurn():

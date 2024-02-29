@@ -43,6 +43,7 @@ def send_message_and_static_response(conversation, json=False):
     if json:
         payload["format"] = "json"
 
+    print("Payload: ", payload)
 
     response = requests.post("http://localhost:11434/api/chat", json=payload)
     if response.status_code == 200:

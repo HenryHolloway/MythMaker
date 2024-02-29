@@ -70,6 +70,13 @@ class GameEngine:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(brain.generateAdventureStart(self.ui.append_message_and_update))
+
+        newInventory = brain.changeInventory(self.ui.conversation)
+
+        if newInventory is not False:
+            self.ui.append_message_and_update("system", f"Inventory updated: {', '.join(newInventory)}", done=True)
+        
+
         loop.close()
 
     async def start_game_async(self):
@@ -104,8 +111,21 @@ class GameEngine:
         # Running the asyncio event loop in a thread
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
+
+        diceRoll = brain.determineDiceRoll(conversation)
+        if diceRoll is not False:
+            self.ui.append_message_and_update("system", diceRoll)
+
+        conversation = self.ui.conversation
+
         print("Calling async send & stream.")
         loop.run_until_complete(send_message_and_stream_response(conversation, self.ui.append_message_and_update))
+        
+        newInventory = brain.changeInventory(conversation)
+
+        if newInventory is not False:
+            self.ui.append_message_and_update("system", f"Inventory updated: {', '.join(newInventory)}", done=True)
+        
         loop.close()
 
 
