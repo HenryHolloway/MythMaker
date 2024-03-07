@@ -18,11 +18,11 @@ async def generateAdventureStart(message_callback):
     #TO DO add inventory specifics to these templates.
     
     examples = [
-    "Your journey to the caverns of Algorath begins as you stand before the entrance, with tales of ancient magic and untold riches fueling your resolve. The land is split by an eternal twilight, casting long shadows and brilliant hues across the landscape. Your objective is clear, but the path is yours to choose. In your leather satchel, you find: \n- A Whispering Blade \n- 12 Echoing Shards \n- A lantern that burns without oil \n- A parchment with cryptic inscriptions. \nWhat would you like to do?",
+    "Your journey to the caverns of Algorath begins as you stand before the entrance, with tales of ancient magic and untold riches fueling your resolve. The land is split by an eternal twilight, casting long shadows and brilliant hues across the landscape. Your objective is clear, but the path is yours to choose. In your leather satchel, you find: \n- A Whispering Blade \n- 12 Obsidian Coins \n- A lantern that burns without oil \n- A parchment with cryptic inscriptions. \nWhat would you like to do?",
     
-    "Welcome to Erendorn, a bustling city where the arcane and the mundane intertwine under the watchful eyes of the Archmages. As you navigate through the crowded streets, whispers of power struggles and dark secrets reach your ears. Your destiny awaits, but how you reach it is yet to be written. In your possessions, you discover: \n- An Archmage's Wand \n- 15 Gilded Feathers \n- A miniature mechanical bird \n- A sealed envelope with a mysterious insignia. \nWhat would you like to do?",
+    "Welcome to Erendorn, a bustling city where the arcane and the mundane intertwine under the watchful eyes of the Archmages. As you navigate through the crowded streets, whispers of power struggles and dark secrets reach your ears. Your destiny awaits, but how you reach it is yet to be written. In your possessions, you discover: \n- An Archmage's Wand \n- 15 Gold Coins \n- A miniature mechanical bird \n- A sealed envelope with a mysterious insignia. \nWhat would you like to do?",
     
-    "The mystic forests of Fae'lyn envelop you, a realm where the ancient trees are said to be guardians of powerful secrets. The air is thick with magic, and every leaf and stone seems to watch your every move. Paths both hidden and visible stretch before you, inviting exploration. Among your belongings are: \n- A Bow of the Verdant Guardian \n- 10 Luminous Seeds \n- A scroll of the woodland path \n- A flask of moonwell water. \nWhat would you like to do?",
+    "The mystic forests of Fae'lyn envelop you, a realm where the ancient trees are said to be guardians of powerful secrets. The air is thick with magic, and every leaf and stone seems to watch your every move. Paths both hidden and visible stretch before you, inviting exploration. Among your belongings are: \n- A Bow of the Verdant Guardian \n- 10 Luminous Coins \n- A scroll of the woodland path \n- A flask of moonwell water. \nWhat would you like to do?",
     
     "Zephyr, the merchant city, teems with life, its streets a testament to the wealth and diversity it harbors. Here, fortunes can be made or lost with a single deal, and your wits will be your greatest asset. Adventure calls from every corner, promising both peril and reward. In your coat pocket, you find: \n- A Merchant's Cane \n- 18 Zephyrian Coins \n- A ledger capturing debts owed to you \n- A cloak woven with threads of concealment. \nWhat would you like to do?",
     
@@ -34,7 +34,7 @@ async def generateAdventureStart(message_callback):
     
     "High above the land, atop the Eagle's Cradle, the world appears vast and unending. The winds carry tales of distant lands and forgotten cities, beckoning you to explore the unknown. The sky is both a map and a mystery, and your adventure is just beginning. Tied around your waist, you have: \n- A Windwhisper Crossbow \n- 20 Stormfeather Tokens \n- A spyglass that sees beyond horizons \n- Gauntlets that steady your aim. \nWhat would you like to do?",
     
-    "The Emerald Exile, a dense jungle teeming with life and peril, stands before you as the ultimate test of survival and ingenuity. Ancient ruins lie hidden under the canopy, home to treasures and traps alike. Your journey through the jungle will be filled with challenges, both seen and unseen. You are equipped with: \n- A Vine-Tangled Staff \n- 11 Jungle Jades \n- A camouflaged tarp \n- A trapping kit. \nWhat would you like to do?"]
+    "The Emerald Exile, a dense jungle teeming with life and peril, stands before you as the ultimate test of survival and ingenuity. Ancient ruins lie hidden under the canopy, home to treasures and traps alike. Your journey through the jungle will be filled with challenges, both seen and unseen. You are equipped with: \n- A Vine-Tangled Staff \n- 11 Jade Coins \n- A camouflaged tarp \n- A trapping kit. \nWhat would you like to do?"]
 
 
     #basically just generate one more!
@@ -69,9 +69,9 @@ def checkLocationChange(user_input):
     response = 'no'
 
     if 'yes' in response:
-        return true
+        return True
     if 'no' in response:
-        return false
+        return False
 
 
 
