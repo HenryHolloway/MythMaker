@@ -36,5 +36,4 @@ run `python3 -m src.main` from the MythMaker Directory
 - ⬜⬜⬜⬜⬜⬜ **Data Pruning/Annotation** - Cleaning and annotating data for better model training.
 - ⬜⬜⬜⬜⬜⬜ **Model Training** - Train LoRA or QLoRA models for improved performance.
 - ⬜⬜⬜⬜⬜⬜ **Full Fine-tune** - Full model fine-tuning (if needed).
-- ⬜⬜⬜⬜⬜⬜ **GBNF Grammar Implementation** - Implement new model using GBNF grammar to replicate the adventure logs more accurately.
-  - ⬜⬜⬜⬜⬜⬜ This step involves redoing the game flow to eliminate prior prompt engineering, allowing the fine-tuned model to handle the logic.
+- ⬜⬜⬜⬜⬜⬜ **GBNF Grammar Implementation** - Implement new model using GBNF grammar to replicate the adventure logs 'in place', passing between the user, system, and model.
