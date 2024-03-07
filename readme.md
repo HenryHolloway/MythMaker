@@ -11,11 +11,11 @@ Myth Maker is revolutionizing the world of text-based adventures by harnessing t
 
 I am going to come back and refine this later, as this project likely isn't worth running yet, but if you're interested in checking out the status thus far, here's a rough guide of what you'll need to do:
 
-Have Ollama running on 127.0.0.1:11434, with an `openchat` model available
-Have ComfyUI running on 127.0.0.1:8188, with outputs going to ~/ComfyUI/output
-Clone this repository
-Install python requirements (...TO DO: create requirements.txt)
-run `python3 -m src.main` from the MythMaker Directory
+- Have Ollama running on 127.0.0.1:11434, with an `openchat` model available
+- Have ComfyUI running on 127.0.0.1:8188, with outputs going to ~/ComfyUI/output
+- Clone this repository
+- Install python requirements (...TO DO: create requirements.txt)
+- run `python3 -m src.main` from the MythMaker Directory
 
 ## Roadmap
 
