@@ -3,9 +3,19 @@
 </div>
 
 ## Myth Maker
-### A guided framework for LLM text adventures.
+### v0.0.5
 
-Please note that this project is still work in progress.
+Myth Maker is revolutionizing the world of text-based adventures by harnessing the power of Large Language Models (LLMs). We aim to replicate the tools found in tabletop RPG games to avoid bias and navigate complex game mechanics, such as dice rolls for determining outcomes, character card generation for creating diverse but consistent personas, inventory management for tracking players' items and preventing cheating or metagaming, and location dynamics that change based on player decisions.
+
+## Installation
+
+I am going to come back and refine this later, as this project likely isn't worth running yet, but if you're interested in checking out the status thus far, here's a rough guide of what you'll need to do:
+
+Have Ollama running on 127.0.0.1:11434, with an `openchat` model available
+Have ComfyUI running on 127.0.0.1:8188, with outputs going to ~/ComfyUI/output
+Clone this repository
+Install python requirements (...TO DO: create requirements.txt)
+run `python3 -m src.main` from the MythMaker Directory
 
 ## Roadmap
 
@@ -20,6 +30,7 @@ Please note that this project is still work in progress.
 - ⬜⬜⬜⬜⬜⬜ **Character & Location Imagery** - Prompt engineering for generating images of characters & locations. 
 - ⬜⬜⬜⬜⬜⬜ **Transparency Logic** - Backend logic to turn the character background transparent.
 - 🟩🟩⬜⬜⬜⬜ **Adventure Logging** - Structured logging of adventures for future reference.
+- 🟩⬜⬜⬜⬜⬜ **Modelfile** - Ollama modelfile for task(s)
 
 ### Stage 2: Enhancement and Fine-tuning
 - ⬜⬜⬜⬜⬜⬜ **Data Pruning/Annotation** - Cleaning and annotating data for better model training.
