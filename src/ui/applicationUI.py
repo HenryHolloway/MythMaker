@@ -66,33 +66,34 @@ class appUI:
         self.user_input.focus_set()  # Refocus on the input field
     
 
-    def append_message_and_update(self, speaker, text, done=True):
+    def append_message_and_update(self, role, text, done=True):
         print("Appending message and updating conversation window.")
         def task():
-            self.append_message(speaker, text)
+            self.append_message(role, text, done)
         # This ensures that Tkinter's operations remain in the main thread
         self.master.after(0, task)
+
 
         if done:
             return True
         return False
 
 
-    def append_message(self, speaker, text):
+    def append_message(self, role, text, done):
         if self.conversation:  # Check if conversation list is not empty
             last_message = self.conversation[-1]  # Get the last message
-            # Check if the last message was from "assistant" and the current speaker is also "assistant"
-            if last_message["role"] == "assistant" and speaker == "assistant":
+            # Check if the last message was from "assistant" and the current role is also "assistant"
+            if last_message["role"] == "assistant" and role == "assistant":
                 # Append the new text to the last message's content
                 last_message["content"] +=  text  # Adding a space for readability
             else:
-                # If last speaker was not "assistant" or the current speaker is not "assistant",
+                # If last role was not "assistant" or the current role is not "assistant",
                 # append the new message as a new entry
-                self.conversation.append({"role": speaker, "content": text})
+                self.conversation.append({"role": role, "content": text})
         else:
             # If the conversation list is empty, just append the message
-            self.conversation.append({"role": speaker, "content": text})
-        
+            self.conversation.append({"role": role, "content": text})
+
         self.update_chat_display()  # Update display after every new message
 
 

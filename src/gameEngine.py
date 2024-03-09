@@ -11,7 +11,8 @@ import os
 import json
 import threading
 import asyncio
-
+import json
+from datetime import datetime
 
 class GameEngine:
     def __init__(self, master):
@@ -137,26 +138,40 @@ class GameEngine:
 
 
     def reset_game(self):
-        print("reset_game called.")
-        self.conversation = []
 
+
+        print("reset_game called.")
+
+        # Generate a unique seed based on the current timestamp
+        seed = datetime.now().strftime("%Y%m%d%H%M%S")
+        backup_filename = f"conversation_{seed}.json"
+
+        # Save the current conversation to a new file with the seed
+        with open(backup_filename, 'w') as backup_file:
+            json.dump(self.conversation, backup_file)
+        print(f"Conversation backed up as {backup_filename}.")
+
+        # Clear the current conversation
+        self.conversation = []
         self.ui.conversation = self.conversation
         print("Conversation cleared.")
 
+        # Update UI components
         self.ui.update_chat_display()
-        self.ui.master.update_idletasks()        
+        self.ui.master.update_idletasks()
         print("Update chat display called.")
 
+        # Save the now empty conversation to reset it
         self.save_conversation()
         print("Conversation saved.")
 
-
+        # Reset databases
         characterDB.resetCharacterDB()
         inventoryDB.resetInventoryDB()
         locationDB.resetLocationDB()
-
         print("Databases reset.")
 
+        # Start a new game
         print("Calling start_game()")
         self.start_game()
         
