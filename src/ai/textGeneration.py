@@ -54,7 +54,7 @@ def send_message_and_static_response(conversation, json=False):
             return response_data.get("message")
     else:
         print("Failed to get response from the server.")
-        return NULL
+        return False
 
 
 

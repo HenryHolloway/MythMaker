@@ -20,12 +20,10 @@ class GameEngine:
         self.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.assets_dir = os.path.join(self.base_dir, 'assets')
         
-        self.backgrounds_dir = os.path.join(self.assets_dir, 'backgrounds')
-        self.characters_dir = os.path.join(self.assets_dir, 'characters')
         self.items_dir = os.path.join(self.assets_dir, 'items')
         
         # Initializing Background
-        self.default_background = os.path.join(self.backgrounds_dir, 'default_background.png')
+        self.default_background = 'MythMaker/assets/backgrounds/default_background.png'
         self.background = self.default_background
 
 
@@ -75,6 +73,8 @@ class GameEngine:
         asyncio.set_event_loop(loop)
         loop.run_until_complete(brain.generateAdventureStart(self.ui.append_message_and_update))
 
+        threading.Thread(target=brain.updateLocation, args=(self.ui.conversation, self.ui.display_stage), daemon=True).start()
+
         newInventory = brain.changeInventory(self.ui.conversation)
 
         if newInventory is not False:
@@ -123,8 +123,11 @@ class GameEngine:
         conversation = self.ui.conversation
 
         print("Calling async send & stream.")
-        loop.run_until_complete(send_message_and_stream_response(conversation, self.ui.append_message_and_update))
+        loop.run_until_complete(brain.generateNextTurn(conversation, self.ui.append_message_and_update))
         
+        threading.Thread(target=brain.updateLocation, args=(self.ui.conversation, self.ui.display_stage), daemon=True).start()
+
+
         newInventory = brain.changeInventory(conversation)
 
         if newInventory is not False:

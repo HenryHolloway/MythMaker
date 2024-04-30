@@ -27,10 +27,11 @@ I am going to come back and refine this later, as this project likely isn't wort
   - ⬜⬜⬜⬜⬜⬜ Character management
   - ⬜⬜⬜⬜⬜⬜ Location Management
 - 🟩🟩🟩🟩🟩🟩 **ComfyUI Backend** - Implementing a user-friendly interface backend.
-- ⬜⬜⬜⬜⬜⬜ **Character & Location Imagery** - Prompt engineering for generating images of characters & locations. 
+- 🟩🟩🟩🟨⬜⬜ **Character & Location Imagery** - Prompt engineering for generating images of characters & locations. 
   - ⬜⬜⬜⬜⬜⬜ **Transparency Logic** - Backend logic to turn the character background transparent.
-- ⬜⬜⬜⬜⬜⬜ **TTS Backend** - Backend logic for elegant sounding text-to-speech
-- ⬜⬜⬜⬜⬜⬜ **TTS Frontend** - UI and frontend logic
+  - ⬜⬜⬜⬜⬜⬜ **Stage Update** - Logic to update the stage whenever a the background or characters change
+- 🟩🟩🟩🟩⬜⬜ **TTS Backend** - Backend logic for elegant sounding text-to-speech
+- 🟩🟩🟩🟩🟩⬜ **TTS Frontend** - UI and frontend logic
 - ⬜⬜⬜⬜⬜⬜ **Frontend Settings & UI Changes** - User preferences and backend tweaks
 - 🟩🟩⬜⬜⬜⬜ **Adventure Logging** - Structured logging of adventures for future reference.
 - 🟩⬜⬜⬜⬜⬜ **Modelfile** - Ollama modelfile for task(s)

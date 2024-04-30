@@ -2,9 +2,15 @@
 
 
 def fetchInventory():
-    with open('src/database/inventory.csv', 'r') as file:
-        inventory = file.readlines()
-    return [item.strip().split(',') for item in inventory]
+    try:
+        with open('src/database/inventory.csv', 'r') as file:
+            inventory = file.readlines()
+        return [item.strip().split(',') for item in inventory]
+    except FileNotFoundError:
+        print("File not found. Creating a new inventory file.")
+        with open('src/database/inventory.csv', 'w') as file:
+            file.write('')
+        return []
 
 
 def writeInventory(inventory):

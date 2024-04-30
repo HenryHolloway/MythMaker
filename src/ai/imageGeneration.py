@@ -8,9 +8,11 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 
-def queuePrompt(prompt):
-    workflow = json.load(open('workflow_api.json'))
-
+def queuePrompt(prompt, workflow_name):
+    dir_path = os.path.dirname(os.path.realpath(__file__))  # Gets the directory of the current script
+    workflow_path = os.path.join(dir_path, workflow_name)  # Joins the directory path with the workflow filename
+    workflow = json.load(open(workflow_path))
+    
     workflow["6"]["inputs"]["text"] = prompt
 
     prompt = workflow
@@ -35,8 +37,8 @@ class NewImageHandler(FileSystemEventHandler):
             self.latest_file = event.src_path
             return True
 
-def generateImage(prompt):
-    queuePrompt(prompt)
+def generateImage(prompt, workflow_name):
+    queuePrompt(prompt, workflow_name)
 
     output_dir = os.path.expanduser('~/ComfyUI/output')
     start_time = time.time()
@@ -68,7 +70,62 @@ def generateImage(prompt):
 # flow for processing character images: i.e. prompt with a white bakcground and then automate to key it out so that we have a character image on a transparent background
 
 def generateCharacterImage(prompt):
-    pass
+    workflow = "character_workflow_api.json"
+    
+    path = generateImage("(white background 1.25)" + prompt, workflow)
+
+    # Generate a new filename based on the prompt, with spaces removed
+    new_filename = "ch_" + prompt.replace(" ", "") + ".png"
+
+    # Calculate the absolute path to the 'assets/characters' directory relative to the current file
+    final_path = os.path.join(os.path.dirname(__file__), '..', '..', 'assets', 'characters', new_filename)
+    os.rename(path, final_path)
+
+    # Normalize the path to resolve any '..'
+    normalized_path = os.path.normpath(final_path)
+    # Find the index of the project root directory name in the path
+    project_root_name = "MythMaker"
+    root_index = normalized_path.find(project_root_name)
+    if root_index != -1:
+        # Strip everything before the project root directory name
+        relative_path = normalized_path[root_index:]
+        return relative_path
+    else:
+        # If the project root name is not found in the path, return the normalized path
+        return normalized_path
 
 def generateBackgroundImage(prompt):
-    pass
+    workflow = "background_workflow_api.json"
+    
+    preprompt = "(8k masterpiece surreal cel shaded background art 1.25)"
+
+    fullprompt = preprompt + prompt
+
+    path = generateImage(fullprompt, workflow)
+
+    # Generate a new filename based on the prompt, with spaces removed
+    new_filename = "bg_" + prompt.replace(" ", "")[:20] + ".png"
+    # Calculate the absolute path to the 'assets/backgrounds' directory relative to the current file
+    final_path = os.path.join(os.path.dirname(__file__), '..', '..', 'assets', 'backgrounds', new_filename)
+    os.rename(path, final_path)
+
+    # Normalize the path to resolve any '..'
+    normalized_path = os.path.normpath(final_path)
+    # Find the index of the project root directory name in the path
+    project_root_name = "MythMaker"
+    root_index = normalized_path.find(project_root_name)
+    if root_index != -1:
+        # Strip everything before the project root directory name
+        relative_path = normalized_path[root_index:]
+        return relative_path
+    else:
+        # If the project root name is not found in the path, return the normalized path
+        return normalized_path
+
+
+
+
+if __name__ == "__main__":
+    test_character = generateCharacterImage("(hypperreal 8k anime) elf with  and long brown hair")
+    print("Generated character image path:", test_character)
+
