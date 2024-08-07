@@ -28,18 +28,30 @@ async def generateAdventureStart(message_callback):
     
     "You stand at the edge of a vast, deserted beach, the warm sand shifting beneath your feet as you take in the breathtaking view of the azure ocean stretching out before you. The salty breeze rustles through your hair as you listen to the distant crash of waves against the shoreline. In the distance, you spot a small, uninhabited island shrouded in mist and mystery.\nRumors speak of an ancient temple buried deep within its verdant foliage, guarded by dangerous creatures and deadly traps. Within its hallowed halls lies a priceless artifact known as the Emerald Eye - said to grant eternal wisdom and boundless power to those who possess it. As you gaze longingly at the island, the call of adventure beckons you forth, urging you to embark on this perilous journey in pursuit of untold riches and unimaginable knowledge.\nYou feel the weight of the leather pack hanging by your side, its contents echoing the purpose you have undertaken on this journey. Within it lies:\n- A gleaming silver compass \n- 12 ornate vials filled with powerful potions \n- An enchanted map depicting the hidden path through the island's perilous depths \n- A mysterious key that some say can unlock the secret chamber housing the Emerald Eye\nWhat would you like to do?",
     
-    "In the heart of a sprawling, lush jungle lies the enchanted village of Emberglade, where the sounds of exotic birdsong and distant howls fill the air. The vibrant foliage creates an ethereal canopy overhead as you traverse the winding paths leading to the center of this magical settlement.\nAs you approach the village square, you come across a wise old shaman who speaks of an ancient prophecy foretelling that one day, a chosen hero will arise to bring balance and harmony back to the jungle's inhabitants. This hero is said to possess extraordinary powers granted by the spirits themselves - abilities that could tip the scales between order and chaos for all living things.\nAs you listen intently to the shaman's words, your heart swells with determination as you realize that destiny has chosen you for this noble quest. You feel the weight of the leather pack hanging by your side, its contents echoing the purpose you have undertaken on this journey. Within it lies:\n- A golden staff adorned with intricate carvings \n- 12 luminescent crystals said to hold untold magical properties \n- A flask of life-giving elixir \n- An ancient scroll detailing the secrets of Emberglade's enigmatic spirit guardians\nWhat would you like to do?"]
+    "In the heart of a sprawling, lush jungle lies the enchanted village of Emberglade, where the sounds of exotic birdsong and distant howls fill the air. The vibrant foliage creates an ethereal canopy overhead as you traverse the winding paths leading to the center of this magical settlement.\nAs you approach the village square, you come across a wise old shaman who speaks of an ancient prophecy foretelling that one day, a chosen hero will arise to bring balance and harmony back to the jungle's inhabitants. This hero is said to possess extraordinary powers granted by the spirits themselves - abilities that could tip the scales between order and chaos for all living things.\nAs you listen intently to the shaman's words, your heart swells with determination as you realize that destiny has chosen you for this noble quest. You feel the weight of the leather pack hanging by your side, its contents echoing the purpose you have undertaken on this journey. Within it lies:\n- A golden staff adorned with intricate carvings \n- 12 luminescent crystals said to hold untold magical properties \n- A flask of life-giving elixir \n- An ancient scroll detailing the secrets of Emberglade's enigmatic spirit guardians\nWhat would you like to do?",
+    
+    # modern environments
+    "In the year 2018, in the heart of a bustling town, you find yourself standing in front of a modern coffee shop. The sun is setting, casting a golden hue over the urban landscape. The air is filled with the comforting aroma of freshly brewed coffee mixed with the distant hum of traffic. As people rush by, you notice a flyer pinned to a nearby community board. It reads: 'Mysterious Disappearance of Local Historian - Last Seen at the Old Museum on Oak Street.' Intrigued, you decide to investigate further.\nAs you approach the museum, an old man with a weathered face and wise eyes greets you. He claims to be a friend of the missing historian and warns you of dark secrets lurking within the old building. With a sense of determination, you feel the weight of your backpack, knowing it could prove useful. Inside, you find:\n- A high-beam flashlight\n- A set of lock-picking tools\n- A notebook filled with cryptic clues\n- A mysterious amulet that glows faintly in the dark\nWhat would you like to do?",
+
+    "In the year 2022, in the heart of a tranquil suburban town, you are standing in front of a quaint bookstore that has been a local treasure for decades. The scent of old books and freshly printed pages fills the air as you step inside. The cozy, dimly-lit interior invites you to explore its endless shelves of literary wonders. While browsing, you come across a leather-bound book with no title. Inside the cover, there's an inscription: 'Seek the Hidden Library - Where Time Stands Still.'\nCuriosity piqued, you approach the elderly shopkeeper, who reveals a map hidden within the pages of the book. This map allegedly leads to a secret library said to contain knowledge and artifacts from ancient civilizations. With your backpack slung over your shoulder, you prepare for the journey ahead. Inside, you find:\n- A magnifying glass\n- A set of ancient coins\n- A digital camera\n- A small vial of glowing liquid\nWhat would you like to do?",
+
+    # sci-fi environments:
+    "In the year 2175, you find yourself in the heart of the futuristic city of Neonspire, a dazzling metropolis where towering skyscrapers adorned with holographic advertisements pierce the sky. The streets are alive with the hum of hover cars and the chatter of robots and humans alike. As you walk through a bustling market square, the smell of synthetic foods mingles with the crisp scent of ozone from the numerous electronic devices on display. Suddenly, a small drone whizzes past you, dropping a data chip into your hand inscribed with the words 'The Omega Protocol.'\nCuriosity takes hold as you scan the chip using your wrist-mounted holo-device. It reveals a hidden message about a rogue AI that holds the power to either save or destroy Neonspire. With a sense of urgency, you check the contents of your high-tech utility belt. It contains:\n- A plasma pistol\n- A portable hacking tool\n- A cloaking device\n- A vial of nanobots for instant repairs\nWhat would you like to do?",
+
+    "In the year 3050, deep in the Alpha Centauri colony, you are stationed in the bustling spaceport city of Celestia Prime. The city floats above a gas giant, its shimmering architecture reflecting the stars. As you walk through the busy concourse filled with travelers from various planets, the air buzzes with interstellar languages and the scent of exotic alien foods. A broadcast appears on your holo-comm device, announcing that an ancient spaceship has been discovered on a distant moon, said to hold the secrets of an advanced extinct civilization.\nDetermined to unlock these secrets, you head to the nearest spaceport and board your personal starship. Your journey will be perilous, but you are prepared. Inside your advanced storage compartment, you find:\n- An anti-gravity suit\n- A quantum scanner\n- A universal translator\n- An energy shield generator\nWhat would you like to do?"
+    ]
 
 
     #basically just generate one more!
 
-    prompt = "The following is a list of potential starting prompts for a text adventure game. Please follow the format and produce one more example for the list. NEVER WRITE TWO NEWLINES IN A ROW."
+    prompt = "The following is a list of potential starting prompts for a text adventure game. Please follow the format and produce one more example for the list. NEVER WRITE TWO NEWLINES IN A ROW.\n"
 
-    # Iterate through each string in the list
-    for index, example in enumerate(examples, start=1):
+    # Select 5 random examples from the list
+    selected_examples = random.sample(examples, 5)
+    # Iterate through each selected example
+    for index, example in enumerate(selected_examples, start=1):
         # Print each string with its number in front
-        prompt += (f"```{example}```")
-
+        prompt += (f"{index}. {example}")
 
     conversation = [{"role": "user", "content": prompt}]
 
@@ -49,10 +61,14 @@ async def generateAdventureStart(message_callback):
 async def generateNextTurn(conversation, callback, n=50):
     # Select the last n messages from the conversation for context
     recent_conversation = conversation[-n:]
-    conversation_context = " ".join([f"{message['role']}: {message['content']}" for message in recent_conversation])
+
+   
+    conversation_context = "\n\n".join([f"{message['role']}: {message['content']}" for message in recent_conversation])
     
+
+
     # Craft the prompt with specific instructions
-    prompt = f"You are a dungeon master for a text-adventure game. You are in charge of the high-level decision making and world management. You are also required to 'switch' from DM mode and roleplay as the NPCs as required. The following is the most recent part of the game's story:\n{conversation_context}\n\nBased on the latest action taken by the user and the results of their dice throw (if applicable), describe the immediate consequences of their action. If the user failed their dice throw, they should face the full consequences of failing that action. If the user is engaging with an NPC, you are to roleplay as that NPC. Do not make any decisions for the character. Simply provide a detailed explaination of what happens as a result of the user's last action, keeping in mind the game's tone and themes. NEVER make a decision on behalf of the user or tell the user how their character is feeling. Your response should be one, detailed paragraph, but may be longer if dialogue and action must occur in the same role."
+    prompt = f"You are a dungeon master for a text-adventure game. You are in charge of the high-level decision making and world management. You are also required to 'switch' from DM mode and roleplay as the NPCs as required. The following is the most recent part of the game's story:\n{conversation_context}\n\nBased on the latest action taken by the user and the results of their dice throw (if applicable), describe the immediate consequences of their action. If the user failed their dice throw, they should face the full consequences of failing that action. If the user is engaging with an NPC, you are to roleplay as that NPC. While roleplaying, only respond with the dialogue of the NPC. Don't give scene direction during roleplay unless absolutely necessary. Generally, do not make any decisions for the character. Simply provide a detailed explaination of what happens as a result of the user's last action, keeping in mind the game's tone and themes. NEVER make a decision on behalf of the user or tell the user how their character is feeling. Your response should be one, detailed paragraph, but may be longer if dialogue and action must occur in the same turn."
     
     # Add the prompt to the conversation for the LLM to process
     conversation_with_prompt = [{"role": "user", "content": prompt}]
@@ -152,7 +168,7 @@ def changeInventory(conversation):
 
     #check if oldInventory is empty
     if not oldInventory:
-        prompt += "Inventory currently empty."
+        prompt += "Inventory currently empty. "
 
     else:
         prompt += ', '.join(oldInventory)
@@ -162,9 +178,9 @@ def changeInventory(conversation):
     else:
         prompt += "It's a new game. You must load the inventory into memory."
     
-    prompt += "\nMost recent AI action: " + assistant_response + "\n\nPlease provide the updated contents of the user inventory after their turn. Think critically -- what happened in the last turn? Remember, anything and everything that is handed to or taken from the player must be accounted for. Your job isn't to pass judgement, you are simply an incredibly dilligent and accurate record keeper. Provide a JSON-formatted response following this template: {'justification':'<why you think the inventory changed. be specific, use chain-of-thought reasoining.>','Item 1':'<SHORT ITEM NAME>', Item 2:'<SHORT ITEM NAME>', etc. }. You don't need to keep any information other than the short name of the item. Follow the template exactly, replacing only the information between <>. If you believe the inventory did not change, just say {'justification':'<Your justification for why the inventory did not change, or why the inventory did change>'}"
+    prompt += "\nMost recent AI action: " + assistant_response + "\n\nPlease provide the updated contents of the user inventory after their turn. Think critically -- what happened in the last turn? Remember, anything and everything that is handed to or taken from the player must be accounted for. Your job isn't to pass judgement, you are simply an incredibly dilligent and accurate record keeper. This means you must track not just the items obtained or dispersed, but the quantity as well. Provide a JSON-formatted response reflecting the inventory changes, following this template: {'justification':'<why you think the inventory changed. be specific, use chain-of-thought reasoning to determine which items need to be removed or added. Be verbose.>','Item 1':'<SHORT ITEM NAME>', Item 2:'<SHORT ITEM NAME>', etc. }. You don't need to keep any information other than the short name of the item. The items names should reflect the current state of the inventory. Follow the template exactly, replacing only the <> statements. If you believe the inventory did not change, just say {'justification':'<Your justification for why the inventory did not change, or why the inventory did change>'}\nPlease always use numerical digits to represent numbers, whether the story or user used digits or spelled out numbers. i.e. twenty silver coins should always be represented as 20 Silver Coins. "
 
-
+    prompt += "Examples:\n"
 
 
     conversation = [{"role": "user", "content": prompt}]
@@ -217,13 +233,13 @@ def determineDiceRoll(conversation):
             break
     
     
-    prompt = "You are a game master AI for a text-based adventure game. You specialize in determining when dice-rolls are necessary for a user's turn. Dice rolls are required for certain difficult chance-based actions. Combat actions like attacking an enemy, defending against an attack, performing a stealth action, casting a spell, etc. Exploration Actions such as climbing a steep cliff, disarming a trap, unlocking a treasure chest, etc. Social interactions like persuading a guard to let you pass, bartering with a merchant, gathering information from a local, convincing an NPC to join your quest.\n\nThe following are the two most recent actions in the story:"
+    prompt = "You are a game master AI for a text-based adventure game. You specialize in determining when dice-rolls are necessary for a user's turn. Dice rolls are required for certain difficult chance-based actions. Combat actions like attacking an enemy, defending against an attack, performing a stealth action, casting a spell, etc. Exploration Actions such as climbing a steep cliff, disarming a trap, unlocking a treasure chest, etc. Social interactions like persuading a guard to let you pass, bartering with a merchant, etc. Dice rolls are NOT required for simpler, guaranteed actions or basic tasks that do not have an element of significant risk or chance. For example: Walking through an open field,Having a casual conversation, Picking up a common object from the ground, Eating or drinking at an inn, Entering a building, Reading a sign or a book, etc.\n\nThe following are the two most recent actions in the story:"
 
     prompt += "\nMost recent AI action: " + assistant_response
 
     prompt += "\n\nMost recent user action: " + user_response
     
-    prompt += "\nPlease determine whether a dice roll is required, and if so, what dice and threshold for success. Ability checks are for situations where a character's success or failure isn't guaranteed. If anyone can easily accomplish a task, don't ask for an ability check. You must respond in JSON format using the following template: {'reason':'What the user is rolling the dice to accomplish. Usage: (User rolled a 2 while trying to REASON)', 'threshold':'the minimum number the user needs to roll for success', 'dice_size':'The highest number the user can roll'}. If you decide a dice roll is not necessary, leave the reason as 'NULL' and set threshold and dice_size to -1."
+    prompt += "\nPlease determine whether a dice roll is required, and if so, what dice and threshold for success. Dice rolls are for situations where a character's success or failure isn't guaranteed. If anyone can easily accomplish a task, a dice roll is not necessary. Do not make assumptions about the user's action (i.e. if their action is to go to a tavern, don't assume they're checking for information.) You must respond in JSON format using the following template: {'reason':'What the user is rolling the dice to accomplish. Usage: (User rolled a 2 while trying to REASON)', 'threshold':'the minimum number the user needs to roll for success', 'dice_size':'The highest number the user can roll'}. If you decide a dice roll is not necessary, leave the reason as 'NULL' and set threshold and dice_size to -1."
 
 
     conversation = [{"role": "user", "content": prompt}]

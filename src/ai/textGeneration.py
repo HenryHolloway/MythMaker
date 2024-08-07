@@ -7,7 +7,7 @@ async def send_message_and_stream_response(conversation, message_callback):
     print("Send & stream called.")
     # Simulation of constructing a payload with the entire conversation history
     payload = {
-        "model": "openchat",
+        "model": "internlm2:latest",
         "messages": conversation,  # Use provided conversation history
     }
 
@@ -35,7 +35,7 @@ def send_message_and_static_response(conversation, json=False):
     print("Send & static called.")
     # Simulation of constructing a payload with the entire conversation history
     payload = {
-        "model": "openchat",
+        "model": "internlm2:latest",
         "messages": conversation,
         "stream": False
     }

@@ -1,3 +1,9 @@
 *.csv
-*.json
 *.pyc
+*.wav
+*.onnx
+*.json
+!background_workflow_api.json
+!character_workflow_api.json
+*.png
+!default_background.png

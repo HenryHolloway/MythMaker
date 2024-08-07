@@ -159,14 +159,20 @@ class GameEngine:
         self.ui.conversation = self.conversation
         print("Conversation cleared.")
 
+        # Save the now empty conversation to reset it
+        self.save_conversation()
+        print("Conversation saved.")
+
+        self.conversation = [{"role": "system", "content": "Loading!"}]
+        self.ui.conversation = self.conversation
+
+
         # Update UI components
         self.ui.update_chat_display()
         self.ui.master.update_idletasks()
         print("Update chat display called.")
 
-        # Save the now empty conversation to reset it
-        self.save_conversation()
-        print("Conversation saved.")
+
 
         # Reset databases
         characterDB.resetCharacterDB()

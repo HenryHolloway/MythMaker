@@ -101,11 +101,18 @@ class appUI:
             
             
         else:
-            # If the conversation list is empty, just append the message
-            if role == "assistant" and text.startswith(" "):
-                text = text[1:]
+            # Remove the initial "6. " if it exists
+            if role == "assistant":
+                if text.startswith("6") and not self.conversation:
+                    text = text[1:]
+                elif text.startswith(".") and not self.conversation:
+                    text = text[1:]
+                elif text.startswith(" "):
+                    text = text[1:]
+                    self.conversation.append({"role": role, "content": text})
+            else:
+                self.conversation.append({"role": role, "content": text})
 
-            self.conversation.append({"role": role, "content": text})
 
         self.update_chat_display(done)  # Update display after every new message
 
