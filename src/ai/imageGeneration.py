@@ -9,18 +9,23 @@ from watchdog.events import FileSystemEventHandler
 
 
 def queuePrompt(prompt, workflow_name):
-    dir_path = os.path.dirname(os.path.realpath(__file__))  # Gets the directory of the current script
-    workflow_path = os.path.join(dir_path, workflow_name)  # Joins the directory path with the workflow filename
-    workflow = json.load(open(workflow_path))
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    workflow_path = os.path.join(script_dir, workflow_name)
+
+    with open(workflow_path, 'r') as file:
+        workflow = json.load(file)
     
+    # set the text prompt for our positive CLIPTextEncode
     workflow["6"]["inputs"]["text"] = prompt
 
-    prompt = workflow
 
-    p = {"prompt": prompt}
+    p = {"prompt": workflow}
     data = json.dumps(p).encode('utf-8')
-    req =  request.Request("http://127.0.0.1:8188/prompt", data=data)
+
+    print(data)
+    req = request.Request("http://127.0.0.1:8188/prompt", data=data)
     request.urlopen(req)
+
 
 
 class NewImageHandler(FileSystemEventHandler):
@@ -36,6 +41,7 @@ class NewImageHandler(FileSystemEventHandler):
         if time.time() > self.start_time and event.src_path.endswith(self.file_extension):
             self.latest_file = event.src_path
             return True
+
 
 def generateImage(prompt, workflow_name):
     queuePrompt(prompt, workflow_name)
@@ -126,6 +132,9 @@ def generateBackgroundImage(prompt):
 
 
 if __name__ == "__main__":
-    test_character = generateCharacterImage("(hypperreal 8k anime) elf with  and long brown hair")
-    print("Generated character image path:", test_character)
+    test_background = generateBackgroundImage("JUST A LOVELY BACKGROUND IMAGE")
+    print("Generated background image path:", test_background)
+
+    # test_character = generateCharacterImage("(hypperreal 8k anime) elf with  and long brown hair")
+    # print("Generated character image path:", test_character)
 

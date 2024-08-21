@@ -1,16 +1,16 @@
 from src.ai.imageGeneration import generateCharacterImage
+import os
+
+# Define the database path relative to the script's directory
+db_path = os.path.join(os.path.dirname(__file__), "characterDB.json")
 
 def writeCharacterCard(character_json):
     import json
-    # Assuming a file path for the database
-    db_path = "characterDB.json"
     with open(db_path, 'a') as db_file:
         db_file.write(character_json + '\n')
 
 def fetchCharacterCard(character_name):
     import json
-    # Assuming a file path for the database
-    db_path = "characterDB.json"
     with open(db_path, 'r') as db_file:
         for line in db_file:
             character = json.loads(line)
@@ -19,8 +19,6 @@ def fetchCharacterCard(character_name):
     return None
 
 def resetCharacterDB():
-    # Assuming a file path for the database
-    db_path = "characterDB.json"
     open(db_path, 'w').close()
 
 def createCharacter(name, level, physical_description):

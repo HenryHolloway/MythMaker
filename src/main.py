@@ -9,7 +9,7 @@ def main():
     
     # Initialize the GameEngine with Tkinter root as master
     game_engine = GameEngine(master=root)
-    game_engine.start_game()
+    game_engine.ui.startGame()
 
     # Start the Tkinter main loop
     root.mainloop()

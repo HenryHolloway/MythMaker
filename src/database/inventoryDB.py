@@ -1,28 +1,30 @@
-#we are going to user src/database/inventory.csv as our database
+#we are going to use src/database/inventory.json as our database
 
+import json
 
 def fetchInventory():
     try:
-        with open('src/database/inventory.csv', 'r') as file:
-            inventory = file.readlines()
-        return [item.strip().split(',') for item in inventory]
+        with open('src/database/inventory.json', 'r') as file:
+            inventory = json.load(file)
+        return inventory
     except FileNotFoundError:
         print("File not found. Creating a new inventory file.")
-        with open('src/database/inventory.csv', 'w') as file:
-            file.write('')
-        return []
+        with open('src/database/inventory.json', 'w') as file:
+            json.dump({}, file)
+        return {}
+    except json.JSONDecodeError:
+        print("Error decoding JSON. Returning empty inventory.")
+        return {}
 
 
 def writeInventory(inventory):
-    print("Opening inventory.csv for writing.")
-    with open('src/database/inventory.csv', 'w') as file:
+    print("Opening inventory.json for writing.")
+    with open('src/database/inventory.json', 'w') as file:
         print("Writing inventory items to the file.")
-        inventoryLine = ','.join(inventory)
-        print(f"Writing inventory line: {inventoryLine}")
-        file.write(inventoryLine)
+        json.dump(inventory, file, indent=4)
         print("Finished writing inventory to file.")
 
 
 def resetInventoryDB():
-    with open('src/database/inventory.csv', 'w') as file:
-        file.write('')
+    with open('src/database/inventory.json', 'w') as file:
+        json.dump({}, file)

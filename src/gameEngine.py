@@ -1,7 +1,7 @@
 from src.ui.applicationUI import appUI
 import src.ai.brain as brain
 
-from src.ai.textGeneration import send_message_and_stream_response
+from src.ai.textGeneration import sendMessageAndStreamResponse
 
 import src.database.characterDB as characterDB
 import src.database.inventoryDB as inventoryDB
@@ -21,52 +21,22 @@ class GameEngine:
         self.assets_dir = os.path.join(self.base_dir, 'assets')
         
         self.items_dir = os.path.join(self.assets_dir, 'items')
-        
-        # Initializing Background
-        self.default_background = 'MythMaker/assets/backgrounds/default_background.png'
-        self.background = self.default_background
 
 
-
-        self.characters = []
-
-
-        #self.inventory = self.inventory_db.load_inventory()
+        self.inventory = inventoryDB.fetchInventory()
 
         self.conversation = [{"role": "system", "content": "Loading!"}]
 
-        self.ui = appUI(master=master, input_callback=self.process_turn, reset=self.reset_game, conversation=self.conversation)
+        self.ui = appUI(master=master, input_callback=self.process_turn, start_new_conversation_callback=self.start_new_conversation_thread, conversation=self.conversation)
 
-    def save_conversation(self, filepath="conversation.json"):
-        with open(filepath, "w") as file:
-            json.dump(self.ui.conversation, file, indent=4)
-
-
-    def load_conversation(self, filepath="conversation.json"):
-        try:
-            with open(filepath, "r") as file:
-                file_content = file.read()
-                if file_content == "[]":
-                    print("Conversation file not found. Starting a new conversation.")
-                    self.start_new_conversation_thread()
-                    return []
-                else:
-                    loaded_conversation = json.loads(file_content)  # Use json.loads to parse the string content
-                    self.ui.conversation = loaded_conversation  # Update the UI's conversation
-                    self.ui.update_chat_display()  # Reflect the loaded conversation in the UI
-                    return loaded_conversation        
-        except FileNotFoundError:
-            print("File not found. Creating a new conversation file.")
-            self.start_new_conversation_thread()
-            return []
 
     def start_new_conversation_thread(self):
         self.clear_initial_loading_message() 
         threading.Thread(target=self.call_async_generate_adventure_start, daemon=True).start()
 
     def clear_initial_loading_message(self):
-        if self.conversation and self.conversation[0]["content"] == "Loading!":
-            self.conversation.pop(0)  # Remove the first message if it is the "Loading!" message
+        if self.ui.conversation and self.ui.conversation[0]["content"] == "Loading!":
+            self.ui.conversation.pop(0)  # Remove the first message if it is the "Loading!" message
 
     def call_async_generate_adventure_start(self):
         loop = asyncio.new_event_loop()
@@ -74,27 +44,37 @@ class GameEngine:
         loop.run_until_complete(brain.generateAdventureStart(self.ui.append_message_and_update))
 
         threading.Thread(target=brain.updateLocation, args=(self.ui.conversation, self.ui.display_stage), daemon=True).start()
+       
+        # Find the last system message in the conversation that contains the inventory
+        for message in reversed(self.ui.conversation):
+            if message["role"] == "assistant" and "Inventory contents:" in message["content"]:
+                inventory_str = message["content"].split("Inventory contents: ")[1]
+                try:
+                    self.inventory = json.loads(inventory_str, strict=False)
+                    inventoryDB.writeInventory(self.inventory)
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding JSON: {e}")
+                    self.inventory = {}
+                # Remove the inventory part from the original message
+                message["content"] = message["content"].split("Inventory contents: ")[0].strip()
+                break
+        else:
+            self.inventory = {}
 
-        newInventory = brain.changeInventory(self.ui.conversation)
+            self.ui.conversation = [{"role": "system", "content": "Loading!"}]
+            self.ui.update_chat_display()
+            print("UI conversation cleared.")
 
-        if newInventory is not False:
-            self.ui.append_message_and_update("system", f"Inventory updated: {', '.join(newInventory)}", done=True)
-        
+            self.start_new_conversation_thread()
+            return
+
+        if self.inventory is not False:
+            new_inventory_str = ', '.join([f"{k}: {v}" for k, v in self.inventory.items()])
+            self.ui.append_message_and_update("system", f"Inventory updated: {new_inventory_str}", done=True)
+
 
         loop.close()
 
-    async def start_game_async(self):
-        # Display initial game UI/setup
-        self.ui.display_stage(self.background, self.characters)
-
-        self.ui.master.update_idletasks()        
-
-        # Load conversation after UI is ready
-        self.conversation = self.load_conversation()
-
-    def start_game(self):
-        # Since start_game is synchronous, use asyncio to run the asynchronous version
-        asyncio.run(self.start_game_async())
 
 
     def process_turn(self, conversation):
@@ -108,89 +88,46 @@ class GameEngine:
 
 
     def call_async_process(self, conversation):
-        self.call_async_send_stream(conversation)
+        self.async_process_turn(conversation)
 
 
-    def call_async_send_stream(self, conversation):
+    def async_process_turn(self, conversation):
         # Running the asyncio event loop in a thread
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
+
 
         diceRoll = brain.determineDiceRoll(conversation)
         if diceRoll is not False:
             self.ui.append_message_and_update("system", diceRoll)
 
-        conversation = self.ui.conversation
-
-        print("Calling async send & stream.")
-        loop.run_until_complete(brain.generateNextTurn(conversation, self.ui.append_message_and_update))
+        loop.run_until_complete(brain.generateNextTurn(self.ui.conversation, self.ui.append_message_and_update))
         
         threading.Thread(target=brain.updateLocation, args=(self.ui.conversation, self.ui.display_stage), daemon=True).start()
 
 
-        newInventory = brain.changeInventory(conversation)
+        oldInventory = self.inventory
+        self.inventory = brain.changeInventory(conversation)
 
-        if newInventory is not False:
-            self.ui.append_message_and_update("system", f"Inventory updated: {', '.join(newInventory)}", done=True)
-        
+        if self.inventory is not False:
+            old_inventory_str = ', '.join([f"{k}: {v}" for k, v in oldInventory.items()])
+            new_inventory_str = ', '.join([f"{k}: {v}" for k, v in self.inventory.items()])
+            self.ui.append_message_and_update("system", f"Old Inventory: {old_inventory_str} \nInventory updated: {new_inventory_str}", done=True)
 
-        self.save_conversation()
+
+
+        self.ui.save_conversation()
 
 
         loop.close()
 
 
-    def reset_game(self):
-
-
-        print("reset_game called.")
-
-        # Generate a unique seed based on the current timestamp
-        seed = datetime.now().strftime("%Y%m%d%H%M%S")
-        backup_filename = f"conversation_{seed}.json"
-
-        # Save the current conversation to a new file with the seed
-        with open(backup_filename, 'w') as backup_file:
-            json.dump(self.conversation, backup_file)
-        print(f"Conversation backed up as {backup_filename}.")
-
-        # Clear the current conversation
-        self.conversation = []
-        self.ui.conversation = self.conversation
-        print("Conversation cleared.")
-
-        # Save the now empty conversation to reset it
-        self.save_conversation()
-        print("Conversation saved.")
-
-        self.conversation = [{"role": "system", "content": "Loading!"}]
-        self.ui.conversation = self.conversation
-
-
-        # Update UI components
-        self.ui.update_chat_display()
-        self.ui.master.update_idletasks()
-        print("Update chat display called.")
-
-
-
-        # Reset databases
-        characterDB.resetCharacterDB()
-        inventoryDB.resetInventoryDB()
-        locationDB.resetLocationDB()
-        print("Databases reset.")
-
-        # Start a new game
-        print("Calling start_game()")
-        self.start_game()
-        
 
 
 
 
 
-
-# async def test_send_message_and_stream_response():
+# async def test_sendMessageAndStreamResponse():
 #     conversation = [{"role": "user", "content": "Hi, how are you?"}]
 
 #     def message_callback(sender, message):
@@ -198,5 +135,5 @@ class GameEngine:
 #         print(f"Received message from {sender} with content '{message}'")
 
 #     # This line directly calls the function with the provided inputs.
-#     await send_message_and_stream_response(conversation, message_callback)
+#     await sendMessageAndStreamResponse(conversation, message_callback)
     
